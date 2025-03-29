@@ -17,4 +17,12 @@ password = os.env("DB_PASSWORD")
 
 # Create connection string with sqlalchemy
 
-engine = create_engine(f"mssql+pyodbc://{username}")
+engine = create_engine(f"mssql+pyodbc://{username}: {password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server")
+
+try:
+    with engine.connect as conn:
+        print("Successfull")
+except Exception as e:
+    print(f"Error {e}")
+
+
