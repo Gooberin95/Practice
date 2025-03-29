@@ -10,19 +10,25 @@ load_dotenv()
 
 # Get credentials from .env file
 
-server = os.env("DB_SERVER")
-database = os.env("DB_NAME")
-username = os.env("DB_USER")
-password = os.env("DB_PASSWORD")
+server = os.getenv("DB_SERVER")
+database = os.getenv("DB_NAME")
+username = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
 
 # Create connection string with sqlalchemy
 
-engine = create_engine(f"mssql+pyodbc://{username}: {password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server")
+engine = create_engine(f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server")
 
 try:
-    with engine.connect as conn:
+    with engine.connect() as conn:
         print("Successfull")
 except Exception as e:
     print(f"Error {e}")
+
+
+def select_all():
+    query = "SELECT * FROM Homes"
+    df = pd.read_sql(query, engine)
+    print(df)
 
 
